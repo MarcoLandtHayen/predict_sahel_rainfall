@@ -28,7 +28,7 @@ to have a local editable installation of the package.
 
 ## Container Image
 
-Additionally, there's a container image having *reconstruct_missing_data* as pre-installed Python package: https://hub.docker.com/r/mlandthayen/reconstruct_missing_data
+Additionally, there's a container image having **predict_sahel_rainfall** as pre-installed Python package: https://hub.docker.com/r/mlandthayen/predict_sahel_rainfall.
 
 ### Use with Docker
 
@@ -40,6 +40,16 @@ $ docker run -p 8888:8888 --rm -it -v $PWD:/work -w /work mlandthayen/reconstruc
 
 and open the URL starting on `http://127.0.0.1...`.
 Here, `<tag>` can either be `latest` or a more specific tag.
+
+### Use with Singularity
+
+You can use it wherever Singularity is installed by essentially running:
+```shell
+$ singularity pull --disable-cache <target.sif> docker://mlandthayen/climate_index_collection:<tag>
+$ singularity run --bind $WORK <target.sif> jupyter lab --no-browser --ip $(hostname) $WORK
+```
+Here, `<tag>` can either be `latest` or a more specific tag.
+And `<target.sif>`specifies the target file to store the container image.
 
 --------
 
