@@ -34,8 +34,8 @@ Additionally, there's a container image having **predict_sahel_rainfall** as pre
 
 You can use it wherever Docker is installed by running:
 ```shell
-$ docker pull mlandthayen/reconstruct_missing_data:<tag>
-$ docker run -p 8888:8888 --rm -it -v $PWD:/work -w /work mlandthayen/reconstruct_missing_data:<tag> jupyter lab --ip=0.0.0.0
+$ docker pull mlandthayen/predict_sahel_rainfall:<tag>
+$ docker run -p 8888:8888 --rm -it -v $PWD:/work -w /work mlandthayen/predict_sahel_rainfall:<tag> jupyter lab --ip=0.0.0.0
 ```
 
 and open the URL starting on `http://127.0.0.1...`.
@@ -45,7 +45,7 @@ Here, `<tag>` can either be `latest` or a more specific tag.
 
 You can use it wherever Singularity is installed by essentially running:
 ```shell
-$ singularity pull --disable-cache <target.sif> docker://mlandthayen/climate_index_collection:<tag>
+$ singularity pull --disable-cache <target.sif> docker://mlandthayen/predict_sahel_rainfall:<tag>
 $ singularity run --bind $WORK <target.sif> jupyter lab --no-browser --ip $(hostname) $WORK
 ```
 Here, `<tag>` can either be `latest` or a more specific tag.
