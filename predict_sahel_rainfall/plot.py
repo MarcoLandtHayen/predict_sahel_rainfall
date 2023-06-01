@@ -7,7 +7,7 @@ def bar_color(data, color_pos, color_neg):
 
     Parameters
     ----------
-    data: Pandas DataFrame
+    data: np.array
         Containing numerical values.
     color_pos / color_neg: str
         Color codes to be assigned to positive and negative data values, respectively.
@@ -19,4 +19,4 @@ def bar_color(data, color_pos, color_neg):
 
     """
 
-    return np.where(data.values > 0, color_pos, color_neg).T
+    return np.where(data > 0, color_pos, color_neg)
