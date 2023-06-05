@@ -283,6 +283,11 @@ def scale_norm_inputs(scale_norm, train_input, val_input, test_input, input_feat
         ) / train_std
 
     # else: Keep raw input features.
+    if scale_norm == "no":
+        # Only copy unscaled inputs as initialization for scaled inputs:
+        train_input_scaled = np.copy(train_input)
+        val_input_scaled = np.copy(val_input)
+        test_input_scaled = np.copy(test_input)
 
     # Return scaled inputs and statistics from training data:
     return (
