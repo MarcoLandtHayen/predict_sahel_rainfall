@@ -165,3 +165,46 @@ def test_scale_norm_inputs(scale_norm):
     if scale_norm == "norm":
         assert_almost_equal(actual=np.mean(train_input), desired=0, decimal=3)
         assert_almost_equal(actual=np.std(train_input), desired=1, decimal=3)
+
+
+@pytest.mark.parametrize("ESM", list(["CESM", "FOCI"]))
+def test_norm_target(ESM):
+    """Test, if complete preprocessing pipeline ends up with normalized targets, if desired."""
+
+    # Prepare inputs and target:
+    (
+        train_input,
+        train_target,
+        val_input,
+        val_target,
+        test_input,
+        test_target,
+        train_mean,
+        train_std,
+        train_min,
+        train_max,
+    ) = prepare_inputs_and_target(
+        data_url=data_url,
+        ESM=ESM,
+        target_index=target_index,
+        input_features=input_features,
+        add_months=add_months,
+        norm_target=norm_target,
+        lead_time=lead_time,
+        input_length=input_length,
+        train_test_split=train_test_split,
+        train_val_split=train_val_split,
+        scale_norm="no",
+    )
+
+    ## Test normalization of combined training, validation and test targets:
+    assert_almost_equal(
+        actual=np.mean(np.concatenate([train_target, val_target, test_target])),
+        desired=0,
+        decimal=3,
+    )
+    assert_almost_equal(
+        actual=np.std(np.concatenate([train_target, val_target, test_target])),
+        desired=1,
+        decimal=3,
+    )
