@@ -391,8 +391,8 @@ def prepare_inputs_and_target(
     ) = train_val_test_split(
         inputs_split=inputs_split,
         target_cut=target_cut,
-        train_test_split=0.9,
-        train_val_split=0.8,
+        train_test_split=train_test_split,
+        train_val_split=train_val_split,
     )
 
     # Optionally scale or normalize inputs:
