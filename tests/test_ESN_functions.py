@@ -9,7 +9,7 @@ from tensorflow.keras.layers import Dense, Input, Lambda, concatenate
 from tensorflow.keras.models import Model
 
 # Import functions to test:
-from predict_sahel_rainfall.ESN_functions import ESN, predESN, setESN, trainESN
+from predict_sahel_rainfall.ESN_functions import ESN, setESN
 
 
 # Set parameters for test:
