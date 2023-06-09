@@ -8,6 +8,7 @@ dependencies:
   - scipy
   - xarray
   - tensorflow
+  - matplotlib
   ##############
   - pytest
   - pip:
