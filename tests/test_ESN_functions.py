@@ -8,9 +8,11 @@ from numpy.testing import assert_almost_equal
 from tensorflow.keras.layers import Dense, Input, Lambda, concatenate
 from tensorflow.keras.models import Model
 
+from predict_sahel_rainfall.ESN_functions import ESN, setESN
+
+
 # Import functions to test:
 
-from predict_sahel_rainfall.ESN_functions import ESN, setESN
 
 # Set parameters for test:
 input_length = 24
