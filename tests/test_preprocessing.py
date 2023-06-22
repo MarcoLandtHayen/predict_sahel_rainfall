@@ -7,6 +7,7 @@ from numpy.testing import assert_almost_equal
 
 # Import functions to test:
 from predict_sahel_rainfall.preprocessing import (
+    get_target_months,
     load_data,
     prepare_inputs_and_target,
     scale_norm_inputs,
@@ -44,6 +45,24 @@ train_val_split = 0.8
 
 
 @pytest.mark.parametrize("ESM", list(["CESM", "FOCI"]))
+def test_get_target_months(ESM):
+    """Test, if function correctly extracts months according to targets."""
+
+    # Get target months for current ESM and lead time:
+    (train_months, val_months, test_months) = get_target_months(
+        data_url=data_url,
+        ESM=ESM,
+        lead_time=lead_time,
+        input_length=input_length,
+        train_test_split=train_test_split,
+        train_val_split=train_val_split,
+    )
+
+    # Test, if first months correctly takes lead time and input length into account:
+    assert train_months[0] == (lead_time + input_length) % 12
+
+
+@pytest.mark.parametrize("ESM", list(["CESM", "FOCI"]))
 def test_load_data(ESM):
     """Test, if function correctly loads test csv."""
 
@@ -58,7 +77,7 @@ def test_load_data(ESM):
         lead_time=lead_time,
     )
 
-    # Test, if months are addes as additional one-hot encoded input features:
+    # Test, if months are added as additional one-hot encoded input features:
     assert inputs.shape[1] == len(input_features) + 12
 
     # Test, if we end up with only single target feature
