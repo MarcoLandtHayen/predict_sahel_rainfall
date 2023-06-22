@@ -425,3 +425,77 @@ def prepare_inputs_and_target(
         train_min,
         train_max,
     )
+
+
+def get_target_months(
+    data_url, ESM, lead_time, input_length, train_test_split, train_val_split
+):
+    """
+    Function to wrap up selected parts of the complete preprocessing pipeline:
+    Load CICMoD data.
+    Extract months for target, considering specified lead time.
+    Split target into training, validation and test sets.
+
+    Parameters:
+    ===========
+    data_url: str
+        Set url to csv file containing CICMoD indices from desired release.
+    ESM: str
+        Choose ESM from 'CESM' or 'FOCI'
+    lead_time: int
+        Set lead time in months for target index.
+        Needs to be positive (> 0).
+    input_length: int
+        Specify the number of time steps as input length.
+    train_test_split: float
+        Specify amount of combined training and validation data relative to test data.
+    train_val_split: float
+        Specify relative amount of combined training and validation used for training.
+
+    Returns:
+    ========
+    train_months, val_months, test_months Numpy arrays
+        Months, corresponding to targets.
+
+    """
+
+    # Load data:
+    climind = pd.read_csv(data_url)
+
+    # Format data:
+    climind = climind.set_index(["model", "year", "month", "index"]).unstack(level=-1)[
+        "value"
+    ]
+
+    # Extract months for specified model, convert to numpy array:
+    months_ESM = np.array(
+        climind.loc[(ESM)].reset_index().drop(columns=["year"]).loc[:, "month"]
+    ).astype(int)
+
+    # Cut target according to desired lead time:
+    months_ESM = months_ESM[lead_time:]
+
+    # Adjust target: Cut first (input_length - 1) entries
+    months_ESM_cut = months_ESM[input_length - 1 :]
+
+    # Split targets into training, validation and test sets:
+    (
+        _,
+        train_months,
+        _,
+        val_months,
+        _,
+        test_months,
+    ) = train_val_test_split(
+        inputs_split=months_ESM_cut,
+        target_cut=months_ESM_cut,
+        train_test_split=train_test_split,
+        train_val_split=train_val_split,
+    )
+
+    # Return:
+    return (
+        train_months,
+        val_months,
+        test_months,
+    )
