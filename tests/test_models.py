@@ -23,7 +23,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import SGD, Adam
 
 # Import functions to test:
-from predict_sahel_rainfall.models import set_CNN_fc, set_LSTM_fc
+from predict_sahel_rainfall.models import set_CNN_fc, set_LSTM_fc, set_MLP
 
 
 # Set parameters for test:
@@ -117,3 +117,25 @@ def test_n_layers_LSTM_fc():
 
     # Test number of model layers:
     assert len(model.layers) == 5
+
+
+def test_n_layers_MLP():
+    """Test, if function sets up model with correct number of layers."""
+
+    # Set up MLP model:
+    model = set_MLP(
+        input_length=1,
+        n_features=n_features,
+        fc_units=fc_units,
+        fc_activation=fc_activation,
+        output_activation=output_activation,
+        fc_weight_init=fc_weight_init,
+        fc_bias_init=fc_bias_init,
+        fc_weight_reg=fc_weight_reg,
+        fc_bias_reg=fc_bias_reg,
+        learning_rate=learning_rate,
+        loss_function=loss_function,
+    )
+
+    # Test number of model layers:
+    assert len(model.layers) == 3
