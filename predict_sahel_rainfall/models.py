@@ -308,3 +308,93 @@ def set_LSTM_fc(
     )
 
     return model
+
+
+def set_MLP(
+    input_length,
+    n_features,
+    fc_units,
+    fc_activation,
+    output_activation,
+    fc_weight_init,
+    fc_bias_init,
+    fc_weight_reg,
+    fc_bias_reg,
+    learning_rate,
+    loss_function,
+):
+    """
+    Sets up CNN/fc model. Can be used for multi-run experiments.
+
+    Parameters:
+    ===========
+    input_length: int
+        Specify the number of time steps as input length.
+    n_features: int
+        Number of input features.
+    fc_units: array of int
+        Specify the number of units in all hidden fc layers.
+    fc_activation: Str (e.g. 'sigmoid')
+        Specify activation function in hidden fc layers.
+    output_activation: Str (e.g. 'linear')
+        Specify activation function for output unit.
+    fc_weight_init: Str (e.g. 'glorot_uniform' as default)
+        Specify how to initialize weights in fc layers.
+    fc_bias_init: Str (e.g. 'zeros' as default)
+        Specify how to initialize biases in fc layers.
+    fc_weight_reg: Regularizer function (or None as default)
+        Specify regularizer for kernel weights in fc layers.
+    fc_bias_reg: Regularizer function (or None as default)
+        Specify regularizer for biases in fc layers.
+    learning_rate: Float
+        Set the learning rate for the optimizer.
+    loss_function: String (e.g. 'mse')
+        Choose the loss function.
+
+    Returns:
+    ========
+    compiled TF model
+
+    """
+
+    # Start model definition:
+    model = Sequential()
+
+    # Add input layer:
+    input_shape = n_features
+    model.add(Input(shape=input_shape))
+
+    # Add hidden fc layer(s):
+    for i in range(len(fc_units)):
+        model.add(
+            Dense(
+                units=fc_units[i],
+                activation=fc_activation,
+                kernel_initializer=fc_weight_init,
+                bias_initializer=fc_bias_init,
+                kernel_regularizer=fc_weight_reg,
+                bias_regularizer=fc_bias_reg,
+            )
+        )
+
+    # Add output unit:
+    model.add(
+        Dense(
+            units=1,
+            name="output",
+            activation=output_activation,
+            kernel_initializer=fc_weight_init,
+            bias_initializer=fc_bias_init,
+            kernel_regularizer=fc_weight_reg,
+            bias_regularizer=fc_bias_reg,
+        )
+    )
+
+    # Compile model with desired loss function:
+    model.compile(
+        optimizer=Adam(learning_rate=learning_rate),
+        loss=loss_function,
+        metrics=(["mse"]),
+    )
+
+    return model
